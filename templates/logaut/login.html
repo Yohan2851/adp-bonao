@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "../base.html" %}
 
-</body>
-</html>
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card mx-auto" style="width: 30rem;">
+        <div class="card-body">
+            <h5 class="card-title">Login</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Ingrese sus Credenciales</h6>
+            <form method="post">
+                {% csrf_token %}
+                {% crispy form %}
+
+            </form>
+            <a href="{% url 'home' %}" class="card-link">Home</a>
+            <a href="{% url 'register' %}" class="card-link">Enviar solicitud</a>
+        </div>
+    </div>
+
+{% endblock %}

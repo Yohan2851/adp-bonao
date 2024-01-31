@@ -1,19 +1,56 @@
-{ % extends "base.html" % }
+{% extends "../base.html" %}
+{% load static %}
 
+{% block header_class %}d-none{% endblock %}
 {% block content %}
     {% load crispy_forms_tags %}
-    <div class="card mx-auto" style="width: 30rem;">
-        <div class="card-body">
-            <h5 class="card-title">Enviar sulicitud de registro</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">Complete todos los Campos</h6>
-            <form method="post">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button type="submit">Enviar</button>
-            </form>
-            <a href="{% url 'home' %}" class="card-link">home</a>
-            <a href="{% url 'login' %}" class="card-link">iniciar session</a>
+
+    <div class="account-pages mt-2">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <div class="card overflow-hidden">
+                        <div class="bg-primary-custom">
+                            <div class="text-primary text-center p-4">
+                                <h5 class="text-white font-size-20">Biembenido! ADP Bonao</h5>
+                                <p class="text-white-50">Enviar sulicitud de registro</p>
+                                <a href="{% url 'home' %}" class="logo logo-admin">
+                                    <img src="{% static 'img/logo_adp.png' %}" height="60" alt="logo">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="p-3">
+                                {% load crispy_forms_tags %}
+                                <form method="post" class="mt-4">
+                                    {% csrf_token %}
+                                    {% crispy form %}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <p class="mb-0">
+                                ¿De vuelta a casa ?
+                                <a href="{% url 'home' %}" class="fw-semibold text-primary text-decoration-underline">
+                                    Home
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-5 text-center">
+                        <p>Ya tiene una Cuenta ? <a href="{% url 'login' %}" class="fw-medium text-primary">
+                            Iniciar Session </a>
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
+
 
 {% endblock %}

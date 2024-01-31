@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -27,17 +27,33 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
+
 INSTALLED_APPS = [
+    'miembros',
+    'ubicaciones',
+    "jazzmin",
+    "admin_interface",
+    "colorfield",
+    "crispy_forms",
+    "crispy_bootstrap5",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
+    'blog',
+
 ]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +70,8 @@ ROOT_URLCONF = 'custonUser.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        ,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,17 +86,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'custonUser.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': '-6A-dA1Ac1c14a5a4E3cegd6a6E4c3ad',
+        'HOST': 'monorail.proxy.rlwy.net',  # si tienes otra dirección host debes remplazar esta
+        'PORT': '41107',  # si lo dejas vacío tomará el puerto por default
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -99,11 +118,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -111,13 +129,111 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# static files
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Definicion de la carpeta media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'miembros.User'
+
+# settings.py
+AUTHENTICATION_BACKENDS = [
+    'miembros.backends.CustomModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+#  All Auth Configurations
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = 'login_view'
+ACCOUNT_LOGOUT_ON_GET = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS =True
+
+#  All auth form customaization
+ACCOUNT_FORMS = {
+    "login": 'miembros.forms.CustomAuthenticationForm',
+    "signup":'miembros.forms.CustomUserCreationForm',
+}
+
+
+# jazzmin controller
+
+JAZZMIN_SETTINGS = {
+    "hide_apps": ["admin_interface"],
+    'site_title': 'ADP Admin',
+    "site_header": "ADP",
+    'site_brand': 'ADP Bonao',
+    "welcome_sign": "Bienvenido! ADP Bonao",
+    'site_logo': 'img/logo_adp.png',
+    'login_logo': 'img/adp_login.png',
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "miembros.User": "fas fa-user",
+
+    },
+    'topmenu_links': [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        # Enlace al administrador de modelos de usuarios
+        {"model": "auth.User"},
+        # Menú desplegable para la aplicación "books" con enlaces a sus modelos
+        {"app": "Adp"},
+    ],
+    # Ordenar automáticamente las aplicaciones, pero asegurarse de que los enlaces admin de choice y book estén primero dentro de la aplicación books
+    "order_with_respect_to": ["Adp.post", "Adp.comment"],
+
+    "changeform_format": "single",
+    "related_modal_active": True,
+
+}
+
+JAZZMIN_SETTINGS["show_ui_builder"] = True
+
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": True,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-white",
+    "accent": "accent-primary",
+    "navbar": "navbar-navy navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": True,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-light-navy",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-outline-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": True
+}

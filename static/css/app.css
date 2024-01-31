@@ -15,6 +15,10 @@ File: Main Css File
   z-index: 1002;
   background-color: var(--bs-header-bg);
 }
+.hidden-header {
+    display: none;
+}
+
 
 .navbar-header {
   display: -webkit-box;
@@ -1405,6 +1409,8 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
   height: 7.5rem;
   width: 7.5rem;
 }
+
+
 
 .avatar-title {
   -webkit-box-align: center;
